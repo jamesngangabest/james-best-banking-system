@@ -1,0 +1,298 @@
+<html>
+
+<head>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+
+
+<style>
+   /* reset */
+
+*{
+	border: 0;
+	box-sizing: content-box;
+	color: inherit;
+	font-family: inherit;
+	font-size: inherit;
+	font-style: inherit;
+	font-weight: inherit;
+	line-height: inherit;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	text-decoration: none;
+	vertical-align: top;
+}
+
+/* content editable */
+
+*[contenteditable] { border-radius: 0.25em; min-width: 1em; outline: 0; }
+
+*[contenteditable] { cursor: pointer; }
+
+*[contenteditable]:hover, *[contenteditable]:focus, td:hover *[contenteditable], td:focus *[contenteditable], img.hover { background: #DEF; box-shadow: 0 0 1em 0.5em #DEF; }
+
+span[contenteditable] { display: inline-block; }
+
+/* heading */
+
+h1 { font: bold 100% sans-serif; letter-spacing: 0.1em; text-align: center; text-transform: uppercase; }
+h2{ font: bold 100% sans-serif;text-decoration: underline;  text-transform: uppercase;margin-top:3%;}
+/* table */
+
+table { font-size: 75%; table-layout: fixed; width: 100%; }
+table { border-collapse: separate; border-spacing: 2px; }
+th, td { border-width: 1px; padding: 0.5em; position: relative; text-align: left; }
+th, td { border-radius: 0.25em; border-style: solid; }
+th { background: #EEE; border-color: #BBB; }
+td { border-color: #DDD; }
+
+/* page */
+
+html { font: 16px/1 'Open Sans', sans-serif; overflow: auto; padding: 0.5in; }
+html { background: #999; cursor: default; }
+
+body { box-sizing: border-box; height: 11in; margin: 0 auto; overflow: hidden; padding: 0.5in; width: 8.5in; }
+body { background: #FFF; border-radius: 1px; box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5); }
+
+/* header */
+
+header { margin: 0 0 3em; }
+header:after { clear: both; content: ""; display: table; }
+
+header h1 { background: #000; border-radius: 0.25em; color: #FFF; margin: 0 0 1em; padding: 0.5em 0; }
+header address { float: left; font-size: 75%; font-style: normal; line-height: 1.25; margin: 0 1em 1em 0; }
+header address p { margin: 0 0 0.25em; }
+header span, header img { display: block; float: right; }
+header span { margin: 0 0 1em 1em; max-height: 25%; max-width: 60%; position: relative; }
+header img { max-height: 100%; max-width: 100%; }
+header input { cursor: pointer; -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; height: 100%; left: 0; opacity: 0; position: absolute; top: 0; width: 100%; }
+
+/* article */
+
+article, article address, table.meta, table.inventory { margin: 0 0 3em; }
+article:after { clear: both; content: ""; display: table; }
+article h1 { clip: rect(0 0 0 0); position: absolute; }
+
+article address { float: left; font-size: 125%; font-weight: bold; }
+
+/* table meta & balance */
+
+table.meta, table.balance { float: right; width: 36%; }
+table.meta:after, table.balance:after { clear: both; content: ""; display: table; }
+
+/* table meta */
+
+table.meta th { width: 40%; }
+table.meta td { width: 60%; }
+
+/* table items */
+
+table.inventory { clear: both; width: 100%; }
+table.inventory th { font-weight: bold; text-align: center; }
+
+table.inventory td:nth-child(1) { width: 26%; }
+table.inventory td:nth-child(2) { width: 38%; }
+table.inventory td:nth-child(3) { text-align: right; width: 12%; }
+table.inventory td:nth-child(4) { text-align: right; width: 12%; }
+table.inventory td:nth-child(5) { text-align: right; width: 12%; }
+
+/* table balance */
+
+table.balance th, table.balance td { width: 50%; }
+table.balance td { text-align: right; }
+
+/* aside */
+
+aside h1 { border: none; border-width: 0 0 1px; margin: 0 0 1em; }
+aside h1 { border-color: #999; border-bottom-style: solid; }
+
+/* javascript */
+
+.add, .cut
+{
+	border-width: 1px;
+	display: block;
+	font-size: .8rem;
+	padding: 0.25em 0.5em;
+	float: left;
+	text-align: center;
+	width: 0.6em;
+}
+
+.add, .cut
+{
+	background: #9AF;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+	background-image: -moz-linear-gradient(#00ADEE 5%, #0078A5 100%);
+	background-image: -webkit-linear-gradient(#00ADEE 5%, #0078A5 100%);
+	border-radius: 0.5em;
+	border-color: #0076A3;
+	color: #FFF;
+	cursor: pointer;
+	font-weight: bold;
+	text-shadow: 0 -1px 2px rgba(0,0,0,0.333);
+}
+
+.add { margin: -2.5em 0 0; }
+
+.add:hover { background: #00ADEE; }
+
+.cut { opacity: 0; position: absolute; top: 0; left: -1.5em; }
+.cut { -webkit-transition: opacity 100ms ease-in; }
+
+tr:hover .cut { opacity: 1; }
+
+@media print {
+	* { -webkit-print-color-adjust: exact; }
+	html { background: none; padding: 0; }
+	body { box-shadow: none; margin: 0; }
+	span:empty { display: none; }
+	.add, .cut { display: none; }
+}
+
+@page { margin: 0; }
+</style>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+	integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+<div>
+<div style="float:left;width:33%;">
+<table>
+	<tr>
+		<td colspan="2"><img src=""></td>
+	</tr>
+<tr>
+	<td colspan="2">{{document.loan_type.company.name}}</td>
+</tr>
+<tr>
+	<td colspan="2">{{document.loan_type.company.postal_address}}</td></tr>
+<tr><td colspan="2">{{document.loan_type.company.physical_address}}, {{document.loan_type.company.location}}</td></tr>
+<tr><td style="width:25%;"><b>Email:</b></td><td >{{document.loan_type.company.support_email}}</td></tr>
+<tr><td style="width:25%;"><b>Tel:</b></td><td >{{document.loan_type.company.phone}}</td></tr>
+
+</table>
+</div>
+
+<div style="float:right;width:33%;">
+
+<table>
+<tr><td colspan="2">PAYMENT VOUCHER</td></tr>
+<tr>
+	<td><b>Date: <b></td> <td><b>{{document.applied_date}}</b> </td>
+</tr>
+<tr>
+<td><b> Due date: <b></td> <td><b>{{document.due_date}}</b></td>
+</tr>
+<tr><td><b>Account:</b></td><td> <b>{{bank.name}}</b></td></tr>
+<tr>
+	<td><b>Pay to:</b></td> <td><b>{{document.user.first_name}} {{document.user.last_name}}</b></td>
+</tr>
+<tr>
+	<td> 
+		<b> ID Number:</b> </td> 
+	<td> <b>{{document.user.id_number}}</b></td>
+</tr>
+<tr>
+	<td><b>Phone Number: </b></td>
+	<td><b>{{document.user.username}}</b></td>
+</tr>
+<tr>
+	<td><b> Payment Method:</b></td><td> <b>{{document.transfer_method}}</b></td>
+</tr>
+<!-- <tr><td>dsdsd</td></tr> -->
+</table>
+</div>
+</div>
+
+<div>
+<table>
+	<tr>
+		<!-- <th>Serial No.</th> -->
+		<th>Reference No.</th>
+		<th>Payment Method</th>
+		<th>Description</th>
+		<th>Amount</th>
+	</tr>
+
+
+
+	<tr>
+		<td>{{document.loan_code}}</td>
+		<td>{{document.transfer_method}}</td>
+		<td>{{document.loan_reason}} Please deposit:
+	       Bank: <b> {{l.bank_name}} </b> <br>
+		   Branch: <b> {{l.branch_name}}  </b>  <br>
+		   Bank account Number: <b> {{l.bank_account_number}}  </b>
+		</td>
+		<td>{{document.disbursed_amount}}</td>
+	</tr>
+
+</table>
+
+
+</div>
+<div>
+<h2>Terms and Conditions</h2>
+
+</div>
+
+<div class="row" style="width:100%">
+			<div class="col-6">
+				Prepared By: {{officer.appraiser.firstname}} {{officer.appraiser.lastname}}
+			<br>
+			<br>
+				Date                                              
+				------------------------- 
+				<br>
+				<br>
+
+				sign:
+				------------------------------------
+		  </div>
+		  <div class="col-6">
+			Approved By:{{officer.approver.first_name}} {{officer.approver.last_name}}
+			<br>
+			<br>
+			Date
+			-------------------------
+			<br>
+			<br>
+			
+			sign:
+			------------------------------------
+		  </div>
+		
+	</div>
+</div>
+<div class="row" style="width:100%">
+	<div class="col-6">
+		Received By:
+		<br>
+		<br>
+		Date
+		-------------------------
+		
+		<br>
+		<br>
+
+		ID Number:
+		------------------------------------<br>
+		<br>
+		<br>
+		sign:
+		------------------------------------
+	</div>
+
+</div>
+</div>
+<!-- <div style=" clear: both;
+    position: relative;
+
+    margin-top: -40px;">	<img src="http://127.0.0.1:8000/static/images/bottom.png" style="width:100%;height:200px;"></div> -->
+
+</body>
+
+</html>
